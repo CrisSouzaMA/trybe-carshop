@@ -14,6 +14,17 @@ class CarService extends Service<Car> {
     }
     return this.model.create(obj);
   };
+
+  readOne = async (id: string): Promise<Car | ServiceError | null> => {
+    if (id.length < 24) {
+      return null;
+    }
+    const checkId = await this.model.readOne(id);
+    if (!checkId) {
+      throw new Error('Object not found');
+    }
+    return checkId;
+  };
 }
 
 export default CarService;
