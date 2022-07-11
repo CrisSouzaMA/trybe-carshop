@@ -45,7 +45,7 @@ class CarController extends Controller<Car> {
       return car
         ? res.json(car)
         : res.status(400)
-          .json({ error: 'Id must have 24 hexadecimal characters' });
+          .json({ error: this.errors.notValid });
     } catch (error) {
       return res.status(404).json({ error: this.errors.notFound });
     }
@@ -61,13 +61,29 @@ class CarController extends Controller<Car> {
       const car = await this.service.update(id, body);
       if (!car) {
         return res.status(400)
-          .json({ error: 'Id must have 24 hexadecimal characters' });
+          .json({ error: this.errors.notValid });
       }
       if ('error' in car) {
         return res.status(400).json(car);
       }
       return res.status(200).json(car);
     } catch (err) {
+      return res.status(404).json({ error: this.errors.notFound });
+    }
+  };
+
+  delete = async (
+    req: Request<{ id: string }>,
+    res: Response<Car | ResponseError>,
+  ): Promise<typeof res> => {
+    const { id } = req.params;
+    try {
+      const car = await this.service.delete(id);
+      return car
+        ? res.status(204).send(car)
+        : res.status(400)
+          .json({ error: this.errors.notValid });
+    } catch (error) {
       return res.status(404).json({ error: this.errors.notFound });
     }
   };
