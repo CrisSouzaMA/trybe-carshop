@@ -44,9 +44,10 @@ class CarController extends Controller<Car> {
       const car = await this.service.readOne(id);
       return car
         ? res.json(car)
-        : res.status(404).json({ error: this.errors.notFound });
+        : res.status(400)
+          .json({ error: 'Id must have 24 hexadecimal characters' });
     } catch (error) {
-      return res.status(500).json({ error: this.errors.internal });
+      return res.status(404).json({ error: this.errors.notFound });
     }
   };
 }
