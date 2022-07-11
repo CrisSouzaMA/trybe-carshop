@@ -21,7 +21,7 @@ class CarService extends Service<Car> {
     }
     const checkId = await this.model.readOne(id);
     if (!checkId) {
-      throw new Error('Object not found');
+      throw new Error('Object');
     }
     return checkId;
   };
@@ -40,6 +40,17 @@ class CarService extends Service<Car> {
       throw new Error('Object not found');
     }
     return newCar;
+  };
+
+  delete = async (id: string): Promise<Car | null> => {
+    if (id.length < 24) {
+      return null;
+    }
+    const checkId = await this.model.delete(id);
+    if (!checkId) {
+      throw new Error('Object not found');
+    }
+    return checkId;
   };
 }
 
