@@ -52,4 +52,36 @@ describe('Testa a service de carro', () => {
       expect(carId).to.be.equal(CarMocks.mockCar);
     });
   })
+
+  describe('Testa a função que atualiza carro', () => {
+    before(() => {
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(CarMocks.mockCar)
+    })
+
+    after(() => {
+      (Model.findByIdAndUpdate as SinonStub).restore()
+    })
+
+    it('Valida se busca e atualização foi feita com sucesso', async () => {
+      const carService = new CarService();
+      const newCar = await carService.update(CarMocks.mockCarId, CarMocks.mockCar);
+      expect(newCar).to.be.deep.equal(CarMocks.mockCar);
+    })
+  })
+
+  describe('Testa a função que delete carro', () => {
+    before(() => {
+      sinon.stub(Model, 'findOneAndDelete').resolves(1)
+    })
+
+    after(() => {
+      (Model.findOneAndDelete as SinonStub).restore()
+    })
+
+    it('Valida se busca e deleção do carro teve sucesso', async () => {
+      const carService = new CarService();
+      const delCar = await carService.delete(CarMocks.mockCarId);
+      expect(delCar).to.be.deep.equal(1);
+    })
+  })
 });
